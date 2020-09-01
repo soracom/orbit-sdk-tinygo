@@ -32,10 +32,6 @@ Please see [godoc](TODO) for detailed instructions on how to use this SDK.
 
 ## Known issues
 
-### `go mod` support
-
-In current (7th July, 2020), TinyGo hasn't supported `go mod` yet, but the is a plan to support the feature in the next version of `0.13.1`. Until that, it needs to locate this library on your `$GOPATH` manually.
-
 ### Running wasm on the SORACOM Orbit "sandbox" runtime
 
 There are some heavily restricted rules to execute your wasm module on the SORACOM Orbit runtime. For example:
