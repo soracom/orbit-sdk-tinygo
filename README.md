@@ -1,4 +1,4 @@
-# orbit-sdk-tinygo
+# orbit-sdk-tinygo [![PkgGoDev](https://pkg.go.dev/badge/github.com/soracom/orbit-sdk-tinygo)](https://pkg.go.dev/github.com/soracom/orbit-sdk-tinygo) [![Go Report Card](https://goreportcard.com/badge/github.com/soracom/orbit-sdk-tinygo)](https://goreportcard.com/report/github.com/soracom/orbit-sdk-tinygo)
 
 A SORACOM Orbit SDK is for [TinyGo](https://tinygo.org/) to generate wasm modules.
 
