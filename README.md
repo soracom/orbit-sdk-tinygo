@@ -28,7 +28,7 @@ And more pragmatic examples are in [examples/](./examples/).
 
 ## Description
 
-Please see [godoc](https://pkg.go.dev/badge/github.com/soracom/orbit-sdk-tinygo) for detailed instructions on how to use this SDK.
+Please see [godoc](https://pkg.go.dev/github.com/soracom/orbit-sdk-tinygo) for detailed instructions on how to use this SDK.
 
 ## Known issues
 
