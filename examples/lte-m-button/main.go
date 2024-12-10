@@ -70,6 +70,8 @@ func convertInputToOutput(input []byte) (*data.Output, error) {
 
 	timestamp := sdk.GetTimestamp()
 
+	userData, _ := sdk.GetUserData()
+
 	return &data.Output{
 		ClickType:           int32(clickType),
 		ClickTypeName:       clickTypeName,
@@ -79,5 +81,6 @@ func convertInputToOutput(input []byte) (*data.Output, error) {
 		Name:                string(name),
 		Location:            location,
 		Timestamp:           timestamp,
+		UserData:            string(userData),
 	}, nil
 }

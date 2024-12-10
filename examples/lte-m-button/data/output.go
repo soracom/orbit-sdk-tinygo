@@ -12,6 +12,7 @@ type Output struct {
 	Name                string        `json:"name"`
 	Location            *sdk.Location `json:"location"`
 	Timestamp           int64         `json:"timestamp"`
+	UserData            string        `json:"userData"`
 }
 
 func (o *Output) SerializeJSON() ([]byte, error) {
