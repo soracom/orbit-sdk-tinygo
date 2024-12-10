@@ -18,6 +18,7 @@ var (
 type ErrorCode int32
 
 // Location is a struct that contains the longitude and latitude information.
+//
 //go:generate json-ice --type=Location
 type Location struct {
 	Lat float64 `json:"lat"`
@@ -82,6 +83,22 @@ func orbitGetLocationLon() float64
 //export orbit_get_timestamp
 func orbitGetTimestamp() int64
 
+//go:wasm-module env
+//export orbit_get_user_data
+func orbitGetUserdata(*byte, int32) int32
+
+//go:wasm-module env
+//export orbit_get_userdata_len
+func orbitGetUserdataLen() int32
+
+//go:wasm-module env
+//export orbit_get_original_request
+func orbitGetOriginalRequest(*byte, int32) int32
+
+//go:wasm-module env
+//export orbit_get_original_request_len
+func orbitGetOriginalRequestLen() int32
+
 // }}}
 
 // Log outputs a log entry.
@@ -129,6 +146,34 @@ func GetSourceValue(name string) ([]byte, error) {
 	}
 	buff := make([]byte, bufferLen, bufferLen)
 	actualLen := orbitGetSourceValue(name, &buff[0], bufferLen)
+	if bufferLen != actualLen {
+		return nil, ErrInvalidSourceValueLength
+	}
+
+	return buff, nil
+}
+
+func GetUserData() ([]byte, error) {
+	bufferLen := orbitGetUserdataLen()
+	if bufferLen <= 0 {
+		return make([]byte, 0), nil
+	}
+	buff := make([]byte, bufferLen, bufferLen)
+	actualLen := orbitGetUserdata(&buff[0], bufferLen)
+	if bufferLen != actualLen {
+		return nil, ErrInvalidSourceValueLength
+	}
+
+	return buff, nil
+}
+
+func GetOriginalRequest() ([]byte, error) {
+	bufferLen := orbitGetOriginalRequestLen()
+	if bufferLen <= 0 {
+		return make([]byte, 0), nil
+	}
+	buff := make([]byte, bufferLen, bufferLen)
+	actualLen := orbitGetOriginalRequest(&buff[0], bufferLen)
 	if bufferLen != actualLen {
 		return nil, ErrInvalidSourceValueLength
 	}
