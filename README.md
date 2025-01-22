@@ -2,6 +2,10 @@
 
 A SORACOM Orbit SDK is for [TinyGo](https://tinygo.org/) to generate wasm modules.
 
+## Notice
+
+Please use the latest **tagged** release that supports the features currently available on the Soracom platform. The `main` branch may contain unreleased features and could break your code.
+
 ## Synopsis
 
 ### Hello world
