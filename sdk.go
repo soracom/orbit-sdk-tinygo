@@ -92,6 +92,14 @@ func orbitGetLocationLon() float64
 func orbitGetTimestamp() int64
 
 //go:wasm-module env
+//export orbit_get_userdata
+func orbitGetUserdata(*byte, int32) int32
+
+//go:wasm-module env
+//export orbit_get_userdata_len
+func orbitGetUserdataLen() int32
+
+//go:wasm-module env
 //export orbit_get_original_request
 func orbitGetOriginalRequest(*byte, int32) int32
 
@@ -178,7 +186,7 @@ func SetOutputJSON(out string) {
 	orbitSetOutput(out)
 }
 
-// GetOriginalRequestAsString retrieves the original request as a string.
+// GetOriginalRequestAsString retrieves the original request as buffer
 func GetOriginalRequest() ([]byte, error) {
 	bufferLen := orbitGetOriginalRequestLen()
 	if bufferLen <= 0 {
@@ -193,14 +201,14 @@ func GetOriginalRequest() ([]byte, error) {
 	return buff, nil
 }
 
-// GetOriginalRequestAsString retrieves the original request as a string.
-func GetUserData() ([]byte, error) {
-	bufferLen := orbitGetOriginalRequestLen()
+// GetUserData retrieves the userdata as buffer
+func GetUserdata() ([]byte, error) {
+	bufferLen := orbitGetUserdataLen()
 	if bufferLen <= 0 {
 		return nil, ErrNoSourceValue
 	}
 	buff := make([]byte, bufferLen, bufferLen)
-	actualLen := orbitGetOriginalRequest(&buff[0], bufferLen)
+	actualLen := orbitGetUserdata(&buff[0], bufferLen)
 	if bufferLen != actualLen {
 		return nil, ErrInvalidSourceValueLength
 	}
