@@ -18,6 +18,7 @@ var (
 type ErrorCode int32
 
 // Location is a struct that contains the longitude and latitude information.
+//
 //go:generate json-ice --type=Location
 type Location struct {
 	Lat float64 `json:"lat"`
@@ -51,6 +52,14 @@ func orbitSetOutput(string)
 func orbitSetOutputContentType(string)
 
 //go:wasm-module env
+//export orbit_set_tag_value
+func orbitSetTagValue(*byte, int32, *byte, int32)
+
+//go:wasm-module env
+//export orbit_delete_tag_value
+func orbitDeleteTagValue(*byte, int32)
+
+//go:wasm-module env
 //export orbit_get_tag_value
 func orbitGetTagValue(string, *byte, int32) int32
 
@@ -81,6 +90,14 @@ func orbitGetLocationLon() float64
 //go:wasm-module env
 //export orbit_get_timestamp
 func orbitGetTimestamp() int64
+
+//go:wasm-module env
+//export orbit_get_original_request
+func orbitGetOriginalRequest(*byte, int32) int32
+
+//go:wasm-module env
+//export orbit_get_original_request_len
+func orbitGetOriginalRequestLen() int32
 
 // }}}
 
