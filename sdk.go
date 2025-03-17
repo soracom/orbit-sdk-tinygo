@@ -172,6 +172,7 @@ func GetLocation() (*Location, error) {
 		Lat: orbitGetLocationLat(),
 		Lon: orbitGetLocationLon(),
 	}, nil
+
 }
 
 // GetTimestamp returns the timestamp.
@@ -219,15 +220,15 @@ func GetUserdata() ([]byte, error) {
 // Set the tag value of requesting resource (example: SIM)
 func SetTagValue(name string, value string) {
 	nameLen := int32(len(name))
-	nameBuff := make([]byte, nameLen)
+	nameBuff := []byte(name)
 	valueLen := int32(len(value))
-	valueBuff := make([]byte, valueLen)
+	valueBuff := []byte(value)
 	orbitSetTagValue(&nameBuff[0], nameLen, &valueBuff[0], valueLen)
 }
 
 // Delete the tag of requesting resource (example: SIM)
 func DeleteTag(name string) {
 	nameLen := int32(len(name))
-	nameBuff := make([]byte, nameLen)
+	nameBuff := []byte(name)
 	orbitDeleteTagValue(&nameBuff[0], nameLen)
 }
