@@ -177,3 +177,49 @@ func SetOutputJSON(out string) {
 	orbitSetOutputContentType(contentType)
 	orbitSetOutput(out)
 }
+
+// GetOriginalRequestAsString retrieves the original request as a string.
+func GetOriginalRequest() ([]byte, error) {
+	bufferLen := orbitGetOriginalRequestLen()
+	if bufferLen <= 0 {
+		return nil, ErrNoSourceValue
+	}
+	buff := make([]byte, bufferLen, bufferLen)
+	actualLen := orbitGetOriginalRequest(&buff[0], bufferLen)
+	if bufferLen != actualLen {
+		return nil, ErrInvalidSourceValueLength
+	}
+
+	return buff, nil
+}
+
+// GetOriginalRequestAsString retrieves the original request as a string.
+func GetUserData() ([]byte, error) {
+	bufferLen := orbitGetOriginalRequestLen()
+	if bufferLen <= 0 {
+		return nil, ErrNoSourceValue
+	}
+	buff := make([]byte, bufferLen, bufferLen)
+	actualLen := orbitGetOriginalRequest(&buff[0], bufferLen)
+	if bufferLen != actualLen {
+		return nil, ErrInvalidSourceValueLength
+	}
+
+	return buff, nil
+}
+
+// Set the tag value of requesting resource (example: SIM)
+func SetTagValue(name string, value string) {
+	nameLen := int32(len(name))
+	nameBuff := make([]byte, nameLen)
+	valueLen := int32(len(value))
+	valueBuff := make([]byte, valueLen)
+	orbitSetTagValue(&nameBuff[0], nameLen, &valueBuff[0], valueLen)
+}
+
+// Delete the tag of requesting resource (example: SIM)
+func DeleteTag(name string) {
+	nameLen := int32(len(name))
+	nameBuff := make([]byte, nameLen)
+	orbitDeleteTagValue(&nameBuff[0], nameLen)
+}
