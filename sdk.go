@@ -53,11 +53,11 @@ func orbitSetOutputContentType(string)
 
 //go:wasm-module env
 //export orbit_set_tag_value
-func orbitSetTagValue(*byte, int32, *byte, int32)
+func orbitSetTagValue(string, string)
 
 //go:wasm-module env
 //export orbit_delete_tag_value
-func orbitDeleteTagValue(*byte, int32)
+func orbitDeleteTagValue(string)
 
 //go:wasm-module env
 //export orbit_get_tag_value
@@ -219,16 +219,10 @@ func GetUserdata() ([]byte, error) {
 
 // Set the tag value of requesting resource (example: SIM)
 func SetTagValue(name string, value string) {
-	nameLen := int32(len(name))
-	nameBuff := []byte(name)
-	valueLen := int32(len(value))
-	valueBuff := []byte(value)
-	orbitSetTagValue(&nameBuff[0], nameLen, &valueBuff[0], valueLen)
+	orbitSetTagValue(name, value)
 }
 
 // Delete the tag of requesting resource (example: SIM)
 func DeleteTag(name string) {
-	nameLen := int32(len(name))
-	nameBuff := []byte(name)
-	orbitDeleteTagValue(&nameBuff[0], nameLen)
+	orbitDeleteTagValue(name)
 }
