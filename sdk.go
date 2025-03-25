@@ -11,6 +11,8 @@ var (
 	ErrInvalidTagValueLength    = errors.New("expected tag value buffer length and actual buffer length are different")
 	ErrNoSourceValue            = errors.New("no source value")
 	ErrInvalidSourceValueLength = errors.New("expected source value buffer length and actual buffer length are different")
+	ErrNoOriginalRequest        = errors.New("no original request")
+	ErrInvalidLength            = errors.New("expected value buffer length and actual buffer length are different")
 	ErrNoLocationInformation    = errors.New("there is no location information")
 )
 
@@ -187,16 +189,16 @@ func SetOutputJSON(out string) {
 	orbitSetOutput(out)
 }
 
-// GetOriginalRequestAsString retrieves the original request as buffer
+// GetOriginalRequest retrieves the original request as buffer
 func GetOriginalRequest() ([]byte, error) {
 	bufferLen := orbitGetOriginalRequestLen()
 	if bufferLen <= 0 {
-		return nil, ErrNoSourceValue
+		return nil, ErrNoOriginalRequest
 	}
 	buff := make([]byte, bufferLen, bufferLen)
 	actualLen := orbitGetOriginalRequest(&buff[0], bufferLen)
 	if bufferLen != actualLen {
-		return nil, ErrInvalidSourceValueLength
+		return nil, ErrInvalidLength
 	}
 
 	return buff, nil
