@@ -12,6 +12,7 @@ var (
 	ErrNoSourceValue            = errors.New("no source value")
 	ErrInvalidSourceValueLength = errors.New("expected source value buffer length and actual buffer length are different")
 	ErrNoOriginalRequest        = errors.New("no original request")
+	ErrNoUserData               = errors.New("no user data")
 	ErrInvalidLength            = errors.New("expected value buffer length and actual buffer length are different")
 	ErrNoLocationInformation    = errors.New("there is no location information")
 )
@@ -208,12 +209,12 @@ func GetOriginalRequest() ([]byte, error) {
 func GetUserdata() ([]byte, error) {
 	bufferLen := orbitGetUserdataLen()
 	if bufferLen <= 0 {
-		return nil, ErrNoSourceValue
+		return nil, ErrNoUserData
 	}
 	buff := make([]byte, bufferLen, bufferLen)
 	actualLen := orbitGetUserdata(&buff[0], bufferLen)
 	if bufferLen != actualLen {
-		return nil, ErrInvalidSourceValueLength
+		return nil, ErrInvalidLength
 	}
 
 	return buff, nil
