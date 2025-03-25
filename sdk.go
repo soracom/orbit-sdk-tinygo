@@ -220,12 +220,12 @@ func GetUserdata() ([]byte, error) {
 	return buff, nil
 }
 
-// Set the tag value of requesting resource (example: SIM)
+// SetTagValue set the value of requesting resource (example: SIM)
 func SetTagValue(name string, value string) {
 	orbitSetTagValue(name, value)
 }
 
-// Delete the tag of requesting resource (example: SIM)
+// DeleteTag delete the tag of requesting resource (example: SIM)
 func DeleteTag(name string) {
 	orbitDeleteTagValue(name)
 }
