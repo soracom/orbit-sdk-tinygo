@@ -11,6 +11,9 @@ var (
 	ErrInvalidTagValueLength    = errors.New("expected tag value buffer length and actual buffer length are different")
 	ErrNoSourceValue            = errors.New("no source value")
 	ErrInvalidSourceValueLength = errors.New("expected source value buffer length and actual buffer length are different")
+	ErrNoOriginalRequest        = errors.New("no original request")
+	ErrNoUserData               = errors.New("no user data")
+	ErrInvalidLength            = errors.New("expected value buffer length and actual buffer length are different")
 	ErrNoLocationInformation    = errors.New("there is no location information")
 )
 
@@ -18,6 +21,7 @@ var (
 type ErrorCode int32
 
 // Location is a struct that contains the longitude and latitude information.
+//
 //go:generate json-ice --type=Location
 type Location struct {
 	Lat float64 `json:"lat"`
@@ -51,6 +55,14 @@ func orbitSetOutput(string)
 func orbitSetOutputContentType(string)
 
 //go:wasm-module env
+//export orbit_set_tag_value
+func orbitSetTagValue(string, string)
+
+//go:wasm-module env
+//export orbit_delete_tag_value
+func orbitDeleteTagValue(string)
+
+//go:wasm-module env
 //export orbit_get_tag_value
 func orbitGetTagValue(string, *byte, int32) int32
 
@@ -81,6 +93,22 @@ func orbitGetLocationLon() float64
 //go:wasm-module env
 //export orbit_get_timestamp
 func orbitGetTimestamp() int64
+
+//go:wasm-module env
+//export orbit_get_userdata
+func orbitGetUserdata(*byte, int32) int32
+
+//go:wasm-module env
+//export orbit_get_userdata_len
+func orbitGetUserdataLen() int32
+
+//go:wasm-module env
+//export orbit_get_original_request
+func orbitGetOriginalRequest(*byte, int32) int32
+
+//go:wasm-module env
+//export orbit_get_original_request_len
+func orbitGetOriginalRequestLen() int32
 
 // }}}
 
@@ -147,6 +175,7 @@ func GetLocation() (*Location, error) {
 		Lat: orbitGetLocationLat(),
 		Lon: orbitGetLocationLon(),
 	}, nil
+
 }
 
 // GetTimestamp returns the timestamp.
@@ -159,4 +188,44 @@ func SetOutputJSON(out string) {
 	contentType := "application/json"
 	orbitSetOutputContentType(contentType)
 	orbitSetOutput(out)
+}
+
+// GetOriginalRequest retrieves the original request as buffer
+func GetOriginalRequest() ([]byte, error) {
+	bufferLen := orbitGetOriginalRequestLen()
+	if bufferLen <= 0 {
+		return nil, ErrNoOriginalRequest
+	}
+	buff := make([]byte, bufferLen, bufferLen)
+	actualLen := orbitGetOriginalRequest(&buff[0], bufferLen)
+	if bufferLen != actualLen {
+		return nil, ErrInvalidLength
+	}
+
+	return buff, nil
+}
+
+// GetUserData retrieves the userdata as buffer
+func GetUserdata() ([]byte, error) {
+	bufferLen := orbitGetUserdataLen()
+	if bufferLen <= 0 {
+		return nil, ErrNoUserData
+	}
+	buff := make([]byte, bufferLen, bufferLen)
+	actualLen := orbitGetUserdata(&buff[0], bufferLen)
+	if bufferLen != actualLen {
+		return nil, ErrInvalidLength
+	}
+
+	return buff, nil
+}
+
+// SetTagValue set the value of requesting resource (example: SIM)
+func SetTagValue(name string, value string) {
+	orbitSetTagValue(name, value)
+}
+
+// DeleteTag delete the tag of requesting resource (example: SIM)
+func DeleteTag(name string) {
+	orbitDeleteTagValue(name)
 }
